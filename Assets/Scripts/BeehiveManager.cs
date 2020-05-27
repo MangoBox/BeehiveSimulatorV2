@@ -20,9 +20,11 @@ public class BeehiveManager : MonoBehaviour
 
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
+    public Tilemap overlayTilemap;
 
     [Header("Prefabs")]
     public Tile emptyHoneycomb;
+    public Tile honeydrop;
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +51,8 @@ public class BeehiveManager : MonoBehaviour
         //Remove old frame
         
         //Generate new frame
-        frameTilemap.BoxFill(Vector3Int.zero, emptyHoneycomb, 0, frameGridSize.x, 0, frameGridSize.y);
+        frameTilemap.BoxFill(Vector3Int.zero, emptyHoneycomb, -5,-5, 5,5);
+        overlayTilemap.BoxFill(Vector3Int.zero, honeydrop, -2, -2, 2, 2);
 
     }
 }
