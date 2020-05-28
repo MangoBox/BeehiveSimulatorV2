@@ -9,7 +9,6 @@ public class BeehiveManager : MonoBehaviour
     public static BeehiveManager bm;
 
     [Header("Beehive Configuration")]
-    [HideInInspector]
     public Beehive beehive;
     //Number of frames the game starts with.
     public int numberOfFrames;
@@ -35,7 +34,6 @@ public class BeehiveManager : MonoBehaviour
         //Construct new beehive.
         beehive = new Beehive(numberOfFrames, startingPopulation);
 
-
         UpdateScreenFrame(beehive.beehiveFrames[0]);
 
     }
@@ -43,6 +41,8 @@ public class BeehiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        beehive.addHoney((int)(Time.deltaTime * calculateHoneyGrowthRate()));
+        beehive.setPopulation(15000);
     }
 
     //Update the currently displayed frame on the screen.
@@ -54,5 +54,12 @@ public class BeehiveManager : MonoBehaviour
         frameTilemap.BoxFill(Vector3Int.zero, emptyHoneycomb, -5,-5, 5,5);
         overlayTilemap.BoxFill(Vector3Int.zero, honeydrop, -2, -2, 2, 2);
 
+    }
+
+    float calculateHoneyGrowthRate()
+    {
+        //Calculates honey growth rate per second. Should be as a
+        //function of bees pollen?
+        return 100f;
     }
 }
