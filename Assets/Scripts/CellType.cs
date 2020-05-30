@@ -4,7 +4,10 @@ using UnityEngine;
 
 public enum CellType {
     EMPTY,
-    HONEY,
+    POLLEN_STORAGE,
+    HONEY_MAKER,
+    HONEY_STORAGE,
+    ROYAL_JELLY_MAKER,
     BREEDER,
     ROYAL_BREEDER
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -16,6 +17,7 @@ public class BeehiveManager : MonoBehaviour
     public int startingPopulation;
     //Default grid dimensions
     public Vector2Int frameGridSize;
+    public Vector2Int centerOfGrid;
 
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
@@ -41,7 +43,7 @@ public class BeehiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        beehive.addHoney((int)(Time.deltaTime * calculateHoneyGrowthRate()));
+        beehive.addHoney((int)Math.Ceiling(calculateHoneyGrowthRate()*Time.deltaTime));
         beehive.setPopulation(15000);
     }
 
@@ -49,9 +51,17 @@ public class BeehiveManager : MonoBehaviour
     void UpdateScreenFrame(BeehiveFrame target)
     {
         //Remove old frame
-        
+
         //Generate new frame
-        frameTilemap.BoxFill(Vector3Int.zero, emptyHoneycomb, -5,-5, 5,5);
+        frameTilemap.ResizeBounds();
+
+        frameTilemap.BoxFill(new Vector3Int(centerOfGrid.x, centerOfGrid.y, 0), emptyHoneycomb,
+            -((frameGridSize.x - 1) / 2),
+            -((frameGridSize.y - 1) / 2),
+            ((frameGridSize.x - 1) / 2),
+            ((frameGridSize.y - 1) / 2)
+            );
+        frameTilemap.ResizeBounds();
         overlayTilemap.BoxFill(Vector3Int.zero, honeydrop, -2, -2, 2, 2);
 
     }
@@ -60,6 +70,13 @@ public class BeehiveManager : MonoBehaviour
     {
         //Calculates honey growth rate per second. Should be as a
         //function of bees pollen?
-        return 100f;
+        return 1f;
+    }
+
+    public void ClickOnCell(Vector3Int pos)
+    {
+        TileBase t = overlayTilemap.GetTile(pos);
+        print(pos);
+        overlayTilemap.SetTile(pos, honeydrop);
     }
 }

@@ -26,7 +26,10 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHoneyCount(int honey)
     {
-        honeyText.text = "Honey: " + honey.ToString();
+        string honeyStr = ((float)honey/1000f).ToString();
+        string resultText = string.Format("Honey: {0:G0}", honeyStr);
+
+        honeyText.text = resultText;
     }
 
     public void UpdatePopulationCount(int population)
