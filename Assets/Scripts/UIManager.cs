@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     [Header("UI Objects")]
     public Text honeyText;
     public Text populationText;
+    public Text royalJellyText;
+    public Text pollenText;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +18,8 @@ public class UIManager : MonoBehaviour
 
         BeehiveManager.bm.beehive.HoneyUpdateEvent += UpdateHoneyCount;
         BeehiveManager.bm.beehive.PopulationUpdateEvent += UpdatePopulationCount;
+        BeehiveManager.bm.beehive.PollenUpdateEvent += UpdatePollenCount;
+        BeehiveManager.bm.beehive.JellyUpdateEvent += UpdateJellyCount;
     }
 
     // Update is called once per frame
@@ -26,14 +30,21 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHoneyCount(int honey)
     {
-        string honeyStr = ((float)honey/1000f).ToString();
-        string resultText = string.Format("Honey: {0:G0}", honeyStr);
-
-        honeyText.text = resultText;
+        honeyText.text = "Honey: " + honey.ToString();
     }
 
     public void UpdatePopulationCount(int population)
     {
         populationText.text = "Bees: " + population.ToString();
+    }
+
+    public void UpdatePollenCount(int pollen)
+    {
+        pollenText.text = "Pollen: " + pollen.ToString();
+    }
+
+    public void UpdateJellyCount(int jelly)
+    {
+        royalJellyText.text = "Royal Jelly: " + jelly.ToString();
     }
 }

@@ -21,9 +21,17 @@ public class Beehive
     //Total current amount of honey
     public int currentHoney;
 
+    //Current amount of pollen
+    public int currentPollen;
+
+    //Current amount of jelly
+    public int currentJelly;
+
     //EVENTS
     public event IntUIUpdateCallback HoneyUpdateEvent;
     public event IntUIUpdateCallback PopulationUpdateEvent;
+    public event IntUIUpdateCallback PollenUpdateEvent;
+    public event IntUIUpdateCallback JellyUpdateEvent;
     public delegate void IntUIUpdateCallback(int value);
 
     //Returns all cells in the beehive for statistics.
@@ -32,15 +40,16 @@ public class Beehive
         List<Cell> cells = new List<Cell>();
         foreach (BeehiveFrame frame in beehiveFrames)
         {
-            for(int i = 0; i < frame.cells.Length; i++) {
+            for (int i = 0; i < frame.cells.Length; i++)
+            {
                 //Currently broken
-                    
+
             }
-            
+
         }
         return cells;
     }
-    
+
     //Constructor class
     public Beehive(int _frameNumber, int startingPopulation)
     {
@@ -63,10 +72,27 @@ public class Beehive
         setHoney(currentHoney + amount);
     }
 
+
+    public void setPollen(int pollen)
+    {
+        currentPollen = pollen;
+        PollenUpdateEvent?.Invoke(pollen);
+    }
+
+    public void addPollen(int amount)
+    {
+        setPollen(currentPollen + amount);
+    }
+
+
     public void setPopulation(int pop)
     {
         population = pop;
         PopulationUpdateEvent?.Invoke(pop);
     }
 
+    public void addPopulation(int amount)
+    {
+        setPopulation(population + amount);
+    }
 }

@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Cell.cs" />
     <Compile Include="Assets\Scripts\CellType.cs" />
     <Compile Include="Assets\Scripts\ControlManager.cs" />
+    <Compile Include="Assets\Scripts\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Reference Include="UnityEngine">
       <HintPath>M:/Unity 2019.1.9/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
