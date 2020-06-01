@@ -21,8 +21,13 @@ public class ControlManager : MonoBehaviour
             Vector3 worldPoint = ray.GetPoint(-ray.origin.z / ray.direction.z);
             Vector3Int tilePos = BeehiveManager.bm.frameTilemap.WorldToCell(worldPoint);
             tilePos.z = 0;
-            BeehiveManager.bm.ClickOnCell(tilePos);
-            
+            //Check cell is valid
+            if (BeehiveManager.bm.frameTilemap.GetTile(tilePos) != null)
+            {
+                BeehiveManager.bm.ClickOnCell(tilePos);
+            }
+               
+
         }
     }
 }

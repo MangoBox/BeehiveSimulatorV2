@@ -379,6 +379,9 @@ MonoBehaviour:
   startingPopulation: 1000
   frameGridSize: {x: 17, y: 9}
   centerOfGrid: {x: 0, y: 0}
+  baseHoneyPerSecond: 10
+  honeyGeneratorCost: 1000
+  startingHoney: 1000
   frameTilemap: {fileID: 1786612709}
   overlayTilemap: {fileID: 1558550454}
   emptyHoneycomb: {fileID: 11400000, guid: 750f57b0bd52b064b93b71c3471502e0, type: 2}

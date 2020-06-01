@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,6 +20,11 @@ public class BeehiveManager : MonoBehaviour
     public Vector2Int frameGridSize;
     public Vector2Int centerOfGrid;
 
+    [Header("Game Value Configuration")]
+    public float baseHoneyPerSecond;
+    public int honeyGeneratorCost;
+    public int startingHoney;
+
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
     public Tilemap overlayTilemap;
@@ -31,11 +37,11 @@ public class BeehiveManager : MonoBehaviour
     void Start()
     {
         bm = this;
-
+        
 
         //Construct new beehive.
         beehive = new Beehive(numberOfFrames, startingPopulation);
-
+        beehive.setHoney(startingHoney);
         UpdateScreenFrame(beehive.beehiveFrames[0]);
 
     }
@@ -62,7 +68,7 @@ public class BeehiveManager : MonoBehaviour
             ((frameGridSize.y - 1) / 2)
             );
         frameTilemap.ResizeBounds();
-        overlayTilemap.BoxFill(Vector3Int.zero, honeydrop, -2, -2, 2, 2);
+        //overlayTilemap.BoxFill(Vector3Int.zero, honeydrop, -2, -2, 2, 2);
 
     }
 
@@ -70,13 +76,36 @@ public class BeehiveManager : MonoBehaviour
     {
         //Calculates honey growth rate per second. Should be as a
         //function of bees pollen?
-        return 1f;
+        return baseHoneyPerSecond * (float)GetTileAmount(honeydrop);
     }
 
     public void ClickOnCell(Vector3Int pos)
     {
         TileBase t = overlayTilemap.GetTile(pos);
-        print(pos);
+        if(beehive.currentHoney >= honeyGeneratorCost && overlayTilemap.GetTile<Tile>(pos) == null)
+        {
+            beehive.addHoney(-honeyGeneratorCost);
+            PlaceHoneyGenerator(pos);
+        }
+    }
+
+    public void PlaceHoneyGenerator(Vector3Int pos)
+    {
         overlayTilemap.SetTile(pos, honeydrop);
+    }
+
+    public int GetTileAmount(Tile tile)
+    {
+        int amount = 0;
+        BoundsInt tilemapBounds = overlayTilemap.cellBounds;
+        foreach (Vector3Int pos in tilemapBounds.allPositionsWithin)
+        {
+            Tile comparison_tile = overlayTilemap.GetTile<Tile>(pos);
+            if(comparison_tile != null && comparison_tile == tile)
+            {
+                amount++;
+            }
+        }
+        return amount;
     }
 }
