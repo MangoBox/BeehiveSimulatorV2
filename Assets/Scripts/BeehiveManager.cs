@@ -32,6 +32,8 @@ public class BeehiveManager : MonoBehaviour
     [Header("Prefabs")]
     public Tile emptyHoneycomb;
     public Tile honeydrop;
+    public Tile breeder;
+    public Tile pollenTile;
 
     // Start is called before the first frame update
     void Start()

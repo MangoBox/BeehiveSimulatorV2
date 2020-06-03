@@ -385,7 +385,7 @@ MonoBehaviour:
   frameTilemap: {fileID: 1786612709}
   overlayTilemap: {fileID: 1558550454}
   emptyHoneycomb: {fileID: 11400000, guid: 750f57b0bd52b064b93b71c3471502e0, type: 2}
-  honeydrop: {fileID: 11400000, guid: 81e1b3a12fac5be44b999f8f3c348399, type: 2}
+  honeydrop: {fileID: 11400000, guid: db36afc16bcee614da61cabb8a3dff08, type: 2}
 --- !u!4 &376900068
 Transform:
   m_ObjectHideFlags: 0
@@ -414,8 +414,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   honeyText: {fileID: 824533434}
   populationText: {fileID: 1579456287}
-  royalJellyText: {fileID: 0}
-  pollenText: {fileID: 0}
+  royalJellyText: {fileID: 83107017}
+  pollenText: {fileID: 480488367}
 --- !u!114 &376900070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -923,9 +923,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Population: 4320
-
-'
+  m_Text: 'Population: 0'
 --- !u!222 &1579456288
 CanvasRenderer:
   m_ObjectHideFlags: 0
