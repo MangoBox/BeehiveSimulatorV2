@@ -9,6 +9,10 @@ public class ControlManager : MonoBehaviour
 {
 
     public Camera currentCamera;
+    public float scrollSpeed;
+    public float dragSpeed;
+
+    private Vector3 lastMousePos;
 
 
     void Update()
@@ -28,6 +32,20 @@ public class ControlManager : MonoBehaviour
             }
                
 
+        }
+
+
+        if(Input.mouseScrollDelta.y != 0)
+        {
+            float verticalDelta = Input.mouseScrollDelta.y;
+            currentCamera.orthographicSize += verticalDelta * scrollSpeed;
+        }
+
+        if(Input.GetKey(KeyCode.Mouse1))
+        {
+            Vector3 mouseDelta = Input.mousePosition - lastMousePos;
+            currentCamera.transform.position += -mouseDelta * dragSpeed;
+            lastMousePos = Input.mousePosition;
         }
     }
 }
