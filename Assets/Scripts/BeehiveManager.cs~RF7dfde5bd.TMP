@@ -11,7 +11,7 @@ public class BeehiveManager : MonoBehaviour
     public static BeehiveManager bm;
 
     [Header("Game Configuration")]
-    public GameState gameState;
+    public
 
 
     [Header("Beehive Configuration")]

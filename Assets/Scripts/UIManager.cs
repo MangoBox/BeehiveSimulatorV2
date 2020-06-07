@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public Text populationText;
     public Text royalJellyText;
     public Text pollenText;
+    public GameObject buildMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -46,5 +47,15 @@ public class UIManager : MonoBehaviour
     public void UpdateJellyCount(int jelly)
     {
         royalJellyText.text = "Royal Jelly: " + jelly.ToString();
+    }
+
+    public void OpenBuildMenu()
+    {
+        buildMenu.SetActive(true);
+    }
+
+    public void CloseBuildMenu()
+    {
+        buildMenu.SetActive(false);
     }
 }
