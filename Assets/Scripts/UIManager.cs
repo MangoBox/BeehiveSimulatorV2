@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 public class UIManager : MonoBehaviour
@@ -11,6 +12,11 @@ public class UIManager : MonoBehaviour
     public Text royalJellyText;
     public Text pollenText;
     public GameObject buildMenu;
+
+    public CellType currentPlacingCell;
+    public Image placingCellSprite;
+
+    public Sprite[] cellImages;
 
     // Start is called before the first frame update
     void Start()
@@ -57,5 +63,34 @@ public class UIManager : MonoBehaviour
     public void CloseBuildMenu()
     {
         buildMenu.SetActive(false);
+    }
+
+    public void ClickHoneyGenerator()
+    {
+        currentPlacingCell = CellType.BREEDER;
+        UpdateBuildSprite();
+    }
+
+    public void ClickRoyalJellyGenerator()
+    {
+        currentPlacingCell = CellType.ROYAL_JELLY_MAKER;
+        UpdateBuildSprite();
+    }
+
+    public void UpdateBuildSprite()
+    {
+
+        switch(currentPlacingCell)
+        {
+            case CellType.BREEDER:
+                placingCellSprite.sprite = cellImages[0];
+                return;
+            case CellType.ROYAL_JELLY_MAKER:
+                placingCellSprite.sprite = cellImages[1];
+                return;
+            default:
+                placingCellSprite.sprite = Sprite.Create(new Texture2D(0,0), Rect.zero, Vector2.zero);
+                return;
+        }
     }
 }
