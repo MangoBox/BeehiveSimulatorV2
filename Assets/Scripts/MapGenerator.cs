@@ -11,6 +11,7 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Gameobjects")]
     public Renderer renderTexture;
+    public List<GameObject> flowers;
 
     [Header("Map Settings")]
     public int mapWidth;

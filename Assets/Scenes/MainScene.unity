@@ -857,8 +857,8 @@ MonoBehaviour:
   placingCellSprite: {fileID: 1203469703}
   cellImages:
   - {fileID: 21300000, guid: 7ba49997c59ec9142b27bfebe1b7eed1, type: 3}
+  - {fileID: 21300000, guid: 599fd8a4150aef44ba5cc4c3d8e58586, type: 3}
   - {fileID: 21300000, guid: 57e746f0e7d59a74b998d384fbe4e637, type: 3}
-  - {fileID: 0}
   - {fileID: 0}
 --- !u!114 &376900070
 MonoBehaviour:
@@ -959,8 +959,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: StartGameButton
+      - m_Target: {fileID: 376900069}
+        m_MethodName: ClickRoyalJellyGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
