@@ -1,8 +1,9 @@
-﻿using System;
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Gameobjects")]
     public Renderer renderTexture;
-    public List<GameObject> flowers;
+    public List<Sprite> flowers;
+    public int numFlowers;
+    public float flowerScale;
 
     [Header("Map Settings")]
     public int mapWidth;
@@ -22,6 +25,7 @@ public class MapGenerator : MonoBehaviour
     {
         var noiseMap = GenerateNoisemap(mapWidth, mapHeight, mapScale);
         DrawMap(noiseMap);
+        GenerateFlowers();
 
     }
     public float[,] GenerateNoisemap(int width, int height, float scale)
@@ -55,9 +59,23 @@ public class MapGenerator : MonoBehaviour
 
         tex.SetPixels(colourMap);
         tex.Apply();
+        tex.filterMode = FilterMode.Point;
 
         renderTexture.sharedMaterial.mainTexture = tex;
         renderTexture.transform.localScale = new Vector3(mapScale, 1, mapScale);
+    }
+
+    public void GenerateFlowers()
+    {
+        for(int i = 0; i < numFlowers; i++)
+        {
+            Sprite randomFlower = flowers[Random.Range(0, flowers.Count)];
+            GameObject flower = new GameObject();
+            SpriteRenderer sr = flower.AddComponent<SpriteRenderer>();
+            sr.sprite = randomFlower;
+            flower.transform.position = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
+            flower.transform.localScale = Vector3.one * flowerScale;
+        }
     }
 
     [System.Serializable]
