@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
@@ -13,10 +15,10 @@ public class UIManager : MonoBehaviour
     public Text pollenText;
     public GameObject buildMenu;
 
-    public CellType currentPlacingCell;
     public Image placingCellSprite;
 
-    public Sprite[] cellImages;
+    public GameObject[] hiveViewGameObjects;
+    public GameObject[] mapViewGameObjects;
 
     // Start is called before the first frame update
     void Start()
@@ -35,24 +37,24 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void UpdateHoneyCount(int honey)
+    public void UpdateHoneyCount(float honey)
     {
-        honeyText.text = "Honey: " + honey.ToString();
+        honeyText.text = "Honey: " + ((int)honey).ToString();
     }
 
-    public void UpdatePopulationCount(int population)
+    public void UpdatePopulationCount(float population)
     {
-        populationText.text = "Bees: " + population.ToString();
+        populationText.text = "Bees: " + ((int)population).ToString();
     }
 
-    public void UpdatePollenCount(int pollen)
+    public void UpdatePollenCount(float pollen)
     {
-        pollenText.text = "Pollen: " + pollen.ToString();
+        pollenText.text = "Pollen: " + ((int)pollen).ToString();
     }
 
-    public void UpdateJellyCount(int jelly)
+    public void UpdateJellyCount(float jelly)
     {
-        royalJellyText.text = "Royal Jelly: " + jelly.ToString();
+        royalJellyText.text = "Royal Jelly: " + ((int)jelly).ToString();
     }
 
     public void OpenBuildMenu()
@@ -67,30 +69,39 @@ public class UIManager : MonoBehaviour
 
     public void ClickHoneyGenerator()
     {
-        currentPlacingCell = CellType.BREEDER;
+        BeehiveManager.bm.selectedCell = (int)CellType.HONEY_MAKER;
+        UpdateBuildSprite();
+    }
+
+    public void ClickBreeder()
+    {
+        BeehiveManager.bm.selectedCell = (int)CellType.BREEDER;
         UpdateBuildSprite();
     }
 
     public void ClickRoyalJellyGenerator()
     {
-        currentPlacingCell = CellType.ROYAL_JELLY_MAKER;
+        BeehiveManager.bm.selectedCell = (int)CellType.ROYAL_JELLY_MAKER;
         UpdateBuildSprite();
+    }
+
+    public void ClickMapView()
+    {
+        BeehiveManager.bm.EnterMapView();
+        hiveViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(false));
+        mapViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(true));
+    }
+
+    public void ClickHiveView()
+    {
+        BeehiveManager.bm.EnterHiveView();
+        hiveViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(true));
+        mapViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(false));
     }
 
     public void UpdateBuildSprite()
     {
-
-        switch(currentPlacingCell)
-        {
-            case CellType.BREEDER:
-                placingCellSprite.sprite = cellImages[0];
-                return;
-            case CellType.ROYAL_JELLY_MAKER:
-                placingCellSprite.sprite = cellImages[1];
-                return;
-            default:
-                placingCellSprite.sprite = Sprite.Create(new Texture2D(0,0), Rect.zero, Vector2.zero);
-                return;
-        }
+        placingCellSprite.sprite = BeehiveManager.bm.cellInfos[BeehiveManager.bm.selectedCell].cellSprite;
+        Debug.Log(BeehiveManager.bm.cellInfos[BeehiveManager.bm.selectedCell].buildCost);
     }
 }

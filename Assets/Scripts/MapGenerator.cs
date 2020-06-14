@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 
 public class MapGenerator : MonoBehaviour
@@ -15,6 +16,8 @@ public class MapGenerator : MonoBehaviour
     public List<Sprite> flowers;
     public int numFlowers;
     public float flowerScale;
+
+    public static Color[] drawData;
 
     [Header("Map Settings")]
     public int mapWidth;
@@ -45,16 +48,23 @@ public class MapGenerator : MonoBehaviour
     {
         int width = heightData.GetLength(0);
         int height = heightData.GetLength(1);
-
         Texture2D tex = new Texture2D(width, height);
-
         Color[] colourMap = new Color[width * height];
-        for(int y = 0; y < height; y++)
+        if (drawData == null)
         {
-            for(int x = 0; x < width; x++)
+            
+            
+            for (int y = 0; y < height; y++)
             {
-                colourMap[y * width + x] = colourMapGradient.Evaluate(heightData[x, y]);
+                for (int x = 0; x < width; x++)
+                {
+                    colourMap[y * width + x] = colourMapGradient.Evaluate(heightData[x, y]);
+                }
             }
+            drawData = colourMap;
+        } else
+        {
+            colourMap = drawData;
         }
 
         tex.SetPixels(colourMap);
@@ -73,9 +83,18 @@ public class MapGenerator : MonoBehaviour
             GameObject flower = new GameObject();
             SpriteRenderer sr = flower.AddComponent<SpriteRenderer>();
             sr.sprite = randomFlower;
+
+            flower.AddComponent<BoxCollider2D>();
             flower.transform.position = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
             flower.transform.localScale = Vector3.one * flowerScale;
+            flower.transform.SetParent(renderTexture.transform, true);
+            flower.transform.name = "Flower" + flower.GetHashCode().ToString();
         }
+    }
+
+    public void HiveBtn_Click()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
     [System.Serializable]
@@ -101,5 +120,7 @@ public class MapGenerator : MonoBehaviour
             }
             return Color.black;
         }
+
+
     }
 }

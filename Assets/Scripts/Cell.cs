@@ -8,6 +8,5 @@ public class Cell : MonoBehaviour
 
     public Cell()
     {
-        type = CellType.EMPTY;
     }
 }

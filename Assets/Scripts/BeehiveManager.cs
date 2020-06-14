@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal.VersionControl;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class BeehiveManager : MonoBehaviour
@@ -23,9 +24,12 @@ public class BeehiveManager : MonoBehaviour
     //Default grid dimensions
     public Vector2Int frameGridSize;
     public Vector2Int centerOfGrid;
+    public CellInfo[] cellInfos;
+    public int selectedCell;
 
     [Header("Game Value Configuration")]
     public float baseHoneyPerSecond;
+    public float basePopulationPerSecond;
     public int honeyGeneratorCost;
     public int startingHoney;
 
@@ -43,7 +47,7 @@ public class BeehiveManager : MonoBehaviour
     void Start()
     {
         bm = this;
-        
+        gameState = GameState.HIVE_VIEW;
 
         //Construct new beehive.
         beehive = new Beehive(numberOfFrames, startingPopulation);
@@ -55,8 +59,8 @@ public class BeehiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        beehive.addHoney((int)Math.Ceiling(calculateHoneyGrowthRate()*Time.deltaTime));
-        beehive.setPopulation(15000);
+        beehive.addHoney(calculateHoneyGrowthRate()*Time.deltaTime);
+        beehive.addPopulation(calculatePopulationGrowthRate() * Time.deltaTime);
     }
 
     //Update the currently displayed frame on the screen.
@@ -85,19 +89,45 @@ public class BeehiveManager : MonoBehaviour
         return baseHoneyPerSecond * (float)GetTileAmount(honeydrop);
     }
 
+    float calculatePopulationGrowthRate()
+    {
+        //Calculates honey growth rate per second. Should be as a
+        //function of bees pollen?
+        return basePopulationPerSecond * (float)GetTileAmount(breeder);
+    }
+
     public void ClickOnCell(Vector3Int pos)
     {
         TileBase t = overlayTilemap.GetTile(pos);
-        if(beehive.currentHoney >= honeyGeneratorCost && overlayTilemap.GetTile<Tile>(pos) == null)
+        CellInfo ci = cellInfos[selectedCell];
+
+        if (beehive.currentHoney >= ci.buildCost && overlayTilemap.GetTile<Tile>(pos) == null)
         {
-            beehive.addHoney(-honeyGeneratorCost);
-            PlaceHoneyGenerator(pos);
+            beehive.addHoney(-ci.buildCost);
+            PlaceTile(ci.type, pos);
         }
     }
 
-    public void PlaceHoneyGenerator(Vector3Int pos)
+    public void PlaceTile(CellType type, Vector3Int pos)
     {
-        overlayTilemap.SetTile(pos, honeydrop);
+        switch (type)
+        {
+            case CellType.HONEY_MAKER:
+                overlayTilemap.SetTile(pos, honeydrop);
+                return;
+
+            case CellType.BREEDER:
+                overlayTilemap.SetTile(pos, breeder);
+                return;
+
+
+            case CellType.ROYAL_JELLY_MAKER:
+                overlayTilemap.SetTile(pos, pollenTile);
+                return;
+
+            default:
+                return;
+        }
     }
 
     public int GetTileAmount(Tile tile)
@@ -113,6 +143,36 @@ public class BeehiveManager : MonoBehaviour
             }
         }
         return amount;
+    }
+
+    public void EnterMapView()
+    {
+        gameState = GameState.MAP_VIEW;
+    }
+
+    public void EnterHiveView()
+    {
+        gameState = GameState.HIVE_VIEW;
+    }
+
+    [System.Serializable]
+    public class CellInfo
+    {
+        public CellType type;
+        public int buildCost;
+        public Sprite cellSprite;
+
+        public static CellInfo getCellByType(CellInfo[] infos, CellType type)
+        {
+            foreach(CellInfo ci in infos)
+            {
+                if(ci.type == type)
+                {
+                    return ci;
+                }
+            }
+            return null;
+        }
     }
    
 }
