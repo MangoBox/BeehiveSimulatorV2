@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\ControlManager.cs" />
     <Compile Include="Assets\Scripts\DragController.cs" />
     <Compile Include="Assets\Scripts\Flower.cs" />
+    <Compile Include="Assets\Scripts\FlowerMission.cs" />
     <Compile Include="Assets\Scripts\MainMenuController.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />

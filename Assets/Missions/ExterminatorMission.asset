@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0ba06769ac88b45b3a432d937fc969, type: 3}
+  m_Name: ExterminatorMission
+  m_EditorClassIdentifier: 
+  minSuccessRate: 0.099
+  maxSuccessRate: 0.289
+  minReward: 5000
+  maxReward: 8000
+  minBees: 1200
+  maxBees: 2400
+  description: '- Pest exterminators are near this flower. They could easily kill
+    your bees.'

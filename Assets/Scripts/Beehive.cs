@@ -95,4 +95,15 @@ public class Beehive
     {
         setPopulation(population + amount);
     }
+
+    public void setJelly(float jelly)
+    {
+        currentJelly = jelly;
+        JellyUpdateEvent?.Invoke(jelly);
+    }
+
+    public void addJelly(float amount)
+    {
+        setJelly(currentJelly + amount);
+    }
 }

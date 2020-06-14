@@ -33,6 +33,8 @@ public class BeehiveManager : MonoBehaviour
     [Header("Game Value Configuration")]
     public float baseHoneyPerSecond;
     public float basePopulationPerSecond;
+    public float baseJellyPerSecond;
+    public float honeyToJellyFactor;
     public int honeyGeneratorCost;
     public int startingHoney;
 
@@ -44,6 +46,7 @@ public class BeehiveManager : MonoBehaviour
     public Tile emptyHoneycomb;
     public Tile honeydrop;
     public Tile breeder;
+    public Tile jelly;
     public Tile pollenTile;
 
     // Start is called before the first frame update
@@ -62,9 +65,35 @@ public class BeehiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        beehive.addHoney(calculateHoneyGrowthRate()*Time.deltaTime);
-        beehive.addPopulation(calculatePopulationGrowthRate() * Time.deltaTime);
+        float honeyGeneratingRate = calculateHoneyGrowthRate() * Time.deltaTime;
+
+        float jellyGeneratingRate = calculateJellyGrowthRate() * Time.deltaTime;
+
+        float populationGrowthRate = calculatePopulationGrowthRate() * Time.deltaTime;
+
+        //Net honey growth rate.
+        float netHoneyGrowth = honeyGeneratingRate - (populationGrowthRate + (jellyGeneratingRate * honeyToJellyFactor));
+        beehive.addHoney(netHoneyGrowth);
+        if (beehive.currentPollen > 0)
+        {
+            beehive.addPollen(-honeyGeneratingRate);
+        } else
+        {
+            beehive.setPollen(0);
+        }
+
+        if(beehive.currentHoney <= 0)
+        {
+            beehive.setHoney(0);
+        } else
+        {
+            beehive.addJelly(jellyGeneratingRate);
+            beehive.addPopulation(populationGrowthRate);
+        }
+
+  
     }
+
 
     //Update the currently displayed frame on the screen.
     void UpdateScreenFrame(BeehiveFrame target)
@@ -89,13 +118,28 @@ public class BeehiveManager : MonoBehaviour
     {
         bool success = Random.value <= flower.successChance;
         uiManager.OpenMissionResultDialog(success);
+        if(success)
+        {
+            beehive.addPollen(flower.reward);
+        } else
+        {
+            beehive.addPopulation(-flower.beesRequired);
+        }
+        
     }
 
     float calculateHoneyGrowthRate()
     {
         //Calculates honey growth rate per second. Should be as a
         //function of bees pollen?
-        return baseHoneyPerSecond * (float)GetTileAmount(honeydrop);
+        return beehive.currentPollen > 0 ? baseHoneyPerSecond * (float)GetTileAmount(honeydrop) : 0;
+    }
+
+    float calculateJellyGrowthRate()
+    {
+        //Calculates honey growth rate per second. Should be as a
+        //function of bees pollen?
+        return baseJellyPerSecond * (float)GetTileAmount(jelly);
     }
 
     float calculatePopulationGrowthRate()

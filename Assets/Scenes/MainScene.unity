@@ -1451,13 +1451,16 @@ MonoBehaviour:
   uiManager: {fileID: 376900069}
   baseHoneyPerSecond: 3
   basePopulationPerSecond: 5
+  baseJellyPerSecond: 1
+  honeyToJellyFactor: 1
   honeyGeneratorCost: 50
-  startingHoney: 100
+  startingHoney: 5000
   frameTilemap: {fileID: 1786612709}
   overlayTilemap: {fileID: 1558550454}
   emptyHoneycomb: {fileID: 11400000, guid: 750f57b0bd52b064b93b71c3471502e0, type: 2}
   honeydrop: {fileID: 11400000, guid: 81e1b3a12fac5be44b999f8f3c348399, type: 2}
   breeder: {fileID: 11400000, guid: db36afc16bcee614da61cabb8a3dff08, type: 2}
+  jelly: {fileID: 0}
   pollenTile: {fileID: 11400000, guid: 078dd8fcf8063814e8ebb788b36259fb, type: 2}
 --- !u!4 &376900068
 Transform:
@@ -1593,27 +1596,17 @@ MonoBehaviour:
   mapHeight: 1000
   mapScale: 5
   flowerMissions:
-  - minSuccessRate: 0.279
-    maxSuccessRate: 0.519
-    minReward: 5
-    maxReward: 10
-    minBees: 1
-    maxBees: 1000
-    description: epic mission
-  - minSuccessRate: 1
-    maxSuccessRate: 1
-    minReward: 5
-    maxReward: 10
-    minBees: 1
-    maxBees: 1000
-    description: ggggg
-  - minSuccessRate: 0.76
-    maxSuccessRate: 0.891
-    minReward: 5
-    maxReward: 10
-    minBees: 1
-    maxBees: 1000
-    description: yeet
+  - {fileID: 11400000, guid: b585c4d42fe324a4097bbb6d89ae0528, type: 2}
+  - {fileID: 11400000, guid: 5c96414091b8d3d4e96cc808c8fac604, type: 2}
+  - {fileID: 11400000, guid: 4e937e46e0c76de4282b4bcc04687fed, type: 2}
+  - {fileID: 11400000, guid: 19197dc4115086f4ca35ef43b98afcc7, type: 2}
+  - {fileID: 11400000, guid: 2f6ff3a602a8a9341bf6cfd7a64c6aef, type: 2}
+  - {fileID: 11400000, guid: 8e755c791feb2274599f4d935bbab438, type: 2}
+  - {fileID: 11400000, guid: c7032911fdcc2d645b1f442f67fc0c73, type: 2}
+  - {fileID: 11400000, guid: 95e665a8c0d3b9b42bc630cbda2d2110, type: 2}
+  - {fileID: 11400000, guid: e47147456b04a3944bdffefbe0a5045e, type: 2}
+  - {fileID: 11400000, guid: 2c7dc4ffe2f8a8c439719fe1faace9b9, type: 2}
+  - {fileID: 11400000, guid: 2937828de27e154488678b6588bf8997, type: 2}
 --- !u!1 &430274288
 GameObject:
   m_ObjectHideFlags: 0
