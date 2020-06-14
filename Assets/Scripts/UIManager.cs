@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class UIManager : MonoBehaviour
@@ -14,11 +15,27 @@ public class UIManager : MonoBehaviour
     public Text royalJellyText;
     public Text pollenText;
     public GameObject buildMenu;
+    public GameObject missionResultMenu;
+    public GameObject successMenu;
+    public GameObject failedMenu;
+
+    [Header("Flower Menu")]
+    public GameObject flowerMenu;
+    public Text rewardText;
+    public Text riskText;
+    public Text successText;
+    public Text beesText;
+    public Text descriptionText;
+    public Image flowerImage;
 
     public Image placingCellSprite;
 
     public GameObject[] hiveViewGameObjects;
     public GameObject[] mapViewGameObjects;
+
+    public Color[] riskColors;
+
+    private Flower mostRecentFlower;
 
     // Start is called before the first frame update
     void Start()
@@ -103,5 +120,76 @@ public class UIManager : MonoBehaviour
     {
         placingCellSprite.sprite = BeehiveManager.bm.cellInfos[BeehiveManager.bm.selectedCell].cellSprite;
         Debug.Log(BeehiveManager.bm.cellInfos[BeehiveManager.bm.selectedCell].buildCost);
+    }
+
+
+    public void ClickFlower(Flower flower)
+    {
+        OpenFlowerMenu(flower);
+    }
+
+    public void CloseFlowerMenu()
+    {
+        flowerMenu.SetActive(false);
+    }
+
+    public void ConfirmFlowerCollect()
+    {
+        flowerMenu.SetActive(false);
+        BeehiveManager.bm.ConfirmFlowerMission(mostRecentFlower);
+    }
+
+    public void OpenMissionResultDialog(bool success)
+    {
+        missionResultMenu.SetActive(true);
+        successMenu.SetActive(success);
+        failedMenu.SetActive(!success);
+    }
+
+    public void AcceptMissionResult()
+    {
+        missionResultMenu.SetActive(false);
+    }
+
+    public void OpenFlowerMenu(Flower flower)
+    {
+        flowerMenu.SetActive(true);
+        rewardText.text = "Reward: " + ((int)flower.reward).ToString() + " Pollen";
+        successText.text = ((int)(flower.successChance * 100f)).ToString() + "% Chance of Success";
+        Color riskColor = Color.white;
+        riskText.text = "Risk: " + calculateRiskLevel(flower.successChance, ref riskColor);
+        riskText.color = riskColor;
+        beesText.text = ((int)flower.beesRequired).ToString() + " Bees Required";
+        descriptionText.text = flower.description;
+        mostRecentFlower = flower;
+    }
+
+    public string calculateRiskLevel(float success, ref Color riskColor)
+    {
+        if (success < 0.3f)
+        {
+            riskColor = riskColors[4];
+            return "EXTREME";
+        }
+        else if(success < 0.5f)
+        {
+            riskColor = riskColors[3];
+            return "VERY HIGH";
+        } else if (success < 0.7f)
+        {
+            riskColor = riskColors[2];
+            return "HIGH";
+        }
+        else if (success < 1f)
+        {
+            riskColor = riskColors[1];
+            return "MEDIUM";
+        }
+        else if (success == 1f)
+        {
+            riskColor = riskColors[0];
+            return "NONE";
+        }
+        return "UNKNOWN";
     }
 }

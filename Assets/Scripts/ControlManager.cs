@@ -32,18 +32,7 @@ public class ControlManager : MonoBehaviour
                 {
                     BeehiveManager.bm.ClickOnCell(tilePos);
                 }
-            } else if (BeehiveManager.bm.gameState == GameState.MAP_VIEW)
-            {
-                RaycastHit rhi;
-                var result = Physics.Raycast(ray, out rhi);
-                GameObject obj_hit = rhi.collider.gameObject;
-                Debug.Log(obj_hit.name);
-                if (obj_hit.name.StartsWith("Flower"))
-                {
-                    
-                }
-
-            }   
+            }
             
         }
         MouseSettings currentSettings = BeehiveManager.bm.gameState == GameState.MAP_VIEW ? mapSettings : hiveSettings;
@@ -66,6 +55,7 @@ public class ControlManager : MonoBehaviour
             lastMousePos = Input.mousePosition;
         }
     }
+
 
     [System.Serializable]
     public class MouseSettings

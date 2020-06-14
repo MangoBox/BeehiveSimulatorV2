@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class BeehiveManager : MonoBehaviour
 {
@@ -26,6 +28,7 @@ public class BeehiveManager : MonoBehaviour
     public Vector2Int centerOfGrid;
     public CellInfo[] cellInfos;
     public int selectedCell;
+    public UIManager uiManager;
 
     [Header("Game Value Configuration")]
     public float baseHoneyPerSecond;
@@ -80,6 +83,12 @@ public class BeehiveManager : MonoBehaviour
         frameTilemap.ResizeBounds();
         //overlayTilemap.BoxFill(Vector3Int.zero, honeydrop, -2, -2, 2, 2);
 
+    }
+
+    public void ConfirmFlowerMission(Flower flower)
+    {
+        bool success = Random.value <= flower.successChance;
+        uiManager.OpenMissionResultDialog(success);
     }
 
     float calculateHoneyGrowthRate()

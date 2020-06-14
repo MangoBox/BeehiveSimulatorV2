@@ -24,6 +24,8 @@ public class MapGenerator : MonoBehaviour
     public int mapHeight;
     public float mapScale;
 
+    public FlowerMission[] flowerMissions;
+
     public void Start()
     {
         var noiseMap = GenerateNoisemap(mapWidth, mapHeight, mapScale);
@@ -84,11 +86,14 @@ public class MapGenerator : MonoBehaviour
             SpriteRenderer sr = flower.AddComponent<SpriteRenderer>();
             sr.sprite = randomFlower;
 
-            flower.AddComponent<BoxCollider2D>();
+            flower.AddComponent<CircleCollider2D>();
             flower.transform.position = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
             flower.transform.localScale = Vector3.one * flowerScale;
             flower.transform.SetParent(renderTexture.transform, true);
             flower.transform.name = "Flower" + flower.GetHashCode().ToString();
+            Flower flowerInst = flower.AddComponent<Flower>();
+            ApplyFlowerSettings(ref flowerInst, flowerMissions[Random.Range(0, flowerMissions.Length)]);
+            flower.layer = 9;
         }
     }
 
@@ -122,5 +127,34 @@ public class MapGenerator : MonoBehaviour
         }
 
 
+    }
+
+    public void ApplyFlowerSettings(ref Flower flower, FlowerMission mission)
+    {
+        flower.beesRequired = Random.Range(mission.minBees, mission.maxBees);
+        flower.successChance = Random.Range(mission.minSuccessRate, mission.maxSuccessRate);
+        flower.reward = Random.Range(mission.minReward, mission.maxReward);
+        flower.description = mission.description;
+    }
+
+    [System.Serializable]
+    public class FlowerMission
+    {
+        [Header("Success Rate")]
+        [Range(0, 1)]
+        public float minSuccessRate;
+        [Range(0, 1)]
+        public float maxSuccessRate;
+
+        [Header("Reward")]
+        public float minReward;
+        public float maxReward;
+
+        [Header("Bees Required")]
+        public float minBees;
+        public float maxBees;
+
+        [TextArea(3, 5)]
+        public string description;
     }
 }
