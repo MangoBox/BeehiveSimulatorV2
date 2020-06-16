@@ -37,6 +37,7 @@ public class BeehiveManager : MonoBehaviour
     public float honeyToJellyFactor;
     public int honeyGeneratorCost;
     public int startingHoney;
+    public float queenHealthRate;
 
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
@@ -91,6 +92,8 @@ public class BeehiveManager : MonoBehaviour
             beehive.addPopulation(populationGrowthRate);
         }
 
+        beehive.queenBeeHealth -= queenHealthRate * Time.deltaTime;
+
   
     }
 
@@ -117,7 +120,7 @@ public class BeehiveManager : MonoBehaviour
     public void ConfirmFlowerMission(Flower flower)
     {
         bool success = Random.value <= flower.successChance;
-        uiManager.OpenMissionResultDialog(success);
+        uiManager.OpenMissionResultDialog(success, (int)flower.reward);
         if(success)
         {
             beehive.addPollen(flower.reward);

@@ -27,11 +27,25 @@ public class Beehive
     //Current amount of jelly
     public float currentJelly;
 
+    public float _queenBeeHealth;
+    public float queenBeeHealth
+    {
+        get
+        {
+            return _queenBeeHealth;
+        } set
+        {
+            _queenBeeHealth = value;
+            QueenHealthUpdateEvent?.Invoke(value);
+        }
+    }
+
     //EVENTS
     public event IntUIUpdateCallback HoneyUpdateEvent;
     public event IntUIUpdateCallback PopulationUpdateEvent;
     public event IntUIUpdateCallback PollenUpdateEvent;
     public event IntUIUpdateCallback JellyUpdateEvent;
+    public event IntUIUpdateCallback QueenHealthUpdateEvent;
     public delegate void IntUIUpdateCallback(float value);
 
     //Returns all cells in the beehive for statistics.
@@ -57,6 +71,7 @@ public class Beehive
         this.population = startingPopulation;
 
         beehiveFrames = new BeehiveFrame[frameNumber];
+        queenBeeHealth = 1f;
 
         //Initialize Events
     }

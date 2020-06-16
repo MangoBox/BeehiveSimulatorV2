@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
     public GameObject missionResultMenu;
     public GameObject successMenu;
     public GameObject failedMenu;
+    public Text pollenRewardText;
+    public Image queenBeeHealthMeter;
+
 
     [Header("Flower Menu")]
     public GameObject flowerMenu;
@@ -46,6 +49,7 @@ public class UIManager : MonoBehaviour
         BeehiveManager.bm.beehive.PopulationUpdateEvent += UpdatePopulationCount;
         BeehiveManager.bm.beehive.PollenUpdateEvent += UpdatePollenCount;
         BeehiveManager.bm.beehive.JellyUpdateEvent += UpdateJellyCount;
+        BeehiveManager.bm.beehive.QueenHealthUpdateEvent += UpdateQueenBeeHealth;
     }
 
     // Update is called once per frame
@@ -72,6 +76,11 @@ public class UIManager : MonoBehaviour
     public void UpdateJellyCount(float jelly)
     {
         royalJellyText.text = "Royal Jelly: " + ((int)jelly).ToString();
+    }
+
+    public void UpdateQueenBeeHealth(float health)
+    {
+        queenBeeHealthMeter.fillAmount = health;
     }
 
     public void OpenBuildMenu()
@@ -139,11 +148,12 @@ public class UIManager : MonoBehaviour
         BeehiveManager.bm.ConfirmFlowerMission(mostRecentFlower);
     }
 
-    public void OpenMissionResultDialog(bool success)
+    public void OpenMissionResultDialog(bool success, int pollen = 0)
     {
         missionResultMenu.SetActive(true);
         successMenu.SetActive(success);
         failedMenu.SetActive(!success);
+        pollenRewardText.text = "Reward: " + pollen.ToString() + " Pollen";
     }
 
     public void AcceptMissionResult()

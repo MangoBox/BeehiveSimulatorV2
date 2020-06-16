@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Transactions;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Tilemaps;
@@ -14,6 +15,14 @@ public class ControlManager : MonoBehaviour
     public MouseSettings mapSettings;
     private Vector3 lastMousePos;
 
+    private Vector3 originalCameraPos;
+    private float originalCameraSize;
+
+    private void Start()
+    {
+        originalCameraPos = currentCamera.transform.position;
+        originalCameraSize = currentCamera.orthographicSize;
+    }
 
     void Update()
     {
@@ -56,6 +65,13 @@ public class ControlManager : MonoBehaviour
         }
     }
 
+
+    public void ResetCamera()
+    {
+        currentCamera.orthographicSize = originalCameraSize;
+        currentCamera.transform.position = originalCameraPos;
+
+    }
 
     [System.Serializable]
     public class MouseSettings
