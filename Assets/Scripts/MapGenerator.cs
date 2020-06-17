@@ -19,6 +19,8 @@ public class MapGenerator : MonoBehaviour
 
     public static Color[] drawData;
 
+    public List<GameObject> instantiatedFlowers;
+
     [Header("Map Settings")]
     public int mapWidth;
     public int mapHeight;
@@ -77,8 +79,18 @@ public class MapGenerator : MonoBehaviour
         renderTexture.transform.localScale = new Vector3(mapScale, 1, mapScale);
     }
 
+    public void ClearCurrentFlowers()
+    {
+        foreach(GameObject flower in instantiatedFlowers)
+        {
+            Destroy(flower);
+        }
+        
+    }
+
     public void GenerateFlowers()
     {
+        ClearCurrentFlowers();
         for(int i = 0; i < numFlowers; i++)
         {
             Sprite randomFlower = flowers[Random.Range(0, flowers.Count)];
@@ -87,13 +99,14 @@ public class MapGenerator : MonoBehaviour
             sr.sprite = randomFlower;
 
             flower.AddComponent<CircleCollider2D>();
-            flower.transform.position = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
+            flower.transform.position = new Vector3(Random.Range(-25, 25), Random.Range(-25, 25), 0);
             flower.transform.localScale = Vector3.one * flowerScale;
             flower.transform.SetParent(renderTexture.transform, true);
             flower.transform.name = "Flower" + flower.GetHashCode().ToString();
             Flower flowerInst = flower.AddComponent<Flower>();
             ApplyFlowerSettings(ref flowerInst, flowerMissions[Random.Range(0, flowerMissions.Length)]);
             flower.layer = 9;
+            instantiatedFlowers.Add(flower);
         }
     }
 

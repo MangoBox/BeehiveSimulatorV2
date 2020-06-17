@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -20,6 +21,8 @@ public class UIManager : MonoBehaviour
     public GameObject failedMenu;
     public Text pollenRewardText;
     public Image queenBeeHealthMeter;
+    public Image weekMeter;
+    public Text weekNumber;
 
 
     [Header("Flower Menu")]
@@ -32,6 +35,16 @@ public class UIManager : MonoBehaviour
     public Image flowerImage;
 
     public Image placingCellSprite;
+
+    [Header("Build Cell Menu")]
+    public Text honeyGeneratorCost;
+    public Text honeyGeneratorRate;
+    public Text breederCost;
+    public Text breederRate;
+    public Text royalJellyCost;
+    public Text royalJellyRate;
+    public Text newCellCost;
+    public Text newCellRate;
 
     public GameObject[] hiveViewGameObjects;
     public GameObject[] mapViewGameObjects;
@@ -50,6 +63,13 @@ public class UIManager : MonoBehaviour
         BeehiveManager.bm.beehive.PollenUpdateEvent += UpdatePollenCount;
         BeehiveManager.bm.beehive.JellyUpdateEvent += UpdateJellyCount;
         BeehiveManager.bm.beehive.QueenHealthUpdateEvent += UpdateQueenBeeHealth;
+        BeehiveManager.bm.WeekProgressUpdateEvent += UpdateWeekProgress;
+        BeehiveManager.bm.WeekNumberUpdateEvent += UpdateWeekNumber;
+
+        //Update all initial values
+        honeyGeneratorCost.text = "Cost: " + BeehiveManager.bm.honeyGeneratorCost;
+        honeyGeneratorRate.text = "Rate: " + BeehiveManager.bm.baseHoneyPerSecond;
+        breederCost.text = "Cost: " + BeehiveManager.bm.breederCost;
     }
 
     // Update is called once per frame
@@ -61,6 +81,16 @@ public class UIManager : MonoBehaviour
     public void UpdateHoneyCount(float honey)
     {
         honeyText.text = "Honey: " + ((int)honey).ToString();
+    }
+
+    public void UpdateWeekNumber(float week)
+    {
+        weekNumber.text = "Week " + (int)week;
+    }
+    
+    public void UpdateWeekProgress(float progress)
+    {
+        weekMeter.fillAmount = progress;
     }
 
     public void UpdatePopulationCount(float population)
@@ -114,6 +144,7 @@ public class UIManager : MonoBehaviour
     public void ClickMapView()
     {
         BeehiveManager.bm.EnterMapView();
+        GetComponent<ControlManager>().ResetCamera();
         hiveViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(false));
         mapViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(true));
     }
@@ -121,6 +152,7 @@ public class UIManager : MonoBehaviour
     public void ClickHiveView()
     {
         BeehiveManager.bm.EnterHiveView();
+        GetComponent<ControlManager>().ResetCamera();
         hiveViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(true));
         mapViewGameObjects.Where(x => x != null).ToList().ForEach(x => x.SetActive(false));
     }
@@ -146,6 +178,7 @@ public class UIManager : MonoBehaviour
     {
         flowerMenu.SetActive(false);
         BeehiveManager.bm.ConfirmFlowerMission(mostRecentFlower);
+        mostRecentFlower.gameObject.SetActive(false);
     }
 
     public void OpenMissionResultDialog(bool success, int pollen = 0)

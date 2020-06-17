@@ -16,6 +16,30 @@ public class BeehiveManager : MonoBehaviour
     [Header("Game Configuration")]
     public GameState gameState;
 
+    private float _weekProgress;
+    public float weekProgress
+    {
+        get { return _weekProgress; }
+        set
+        {
+            _weekProgress = value;
+            WeekProgressUpdateEvent?.Invoke(value);
+        }
+    }
+    public event Beehive.IntUIUpdateCallback WeekProgressUpdateEvent;
+
+    private int _weekNumber;
+    public float weekNumber
+    {
+        get { return _weekNumber;  }
+        set
+        {
+            _weekNumber = (int)value;
+            WeekNumberUpdateEvent?.Invoke(value);
+        }
+    }
+
+    public event Beehive.IntUIUpdateCallback WeekNumberUpdateEvent;
 
     [Header("Beehive Configuration")]
     public Beehive beehive;
@@ -38,6 +62,8 @@ public class BeehiveManager : MonoBehaviour
     public int honeyGeneratorCost;
     public int startingHoney;
     public float queenHealthRate;
+    public float weekProgressRate;
+    public float breederCost;
 
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
@@ -55,6 +81,8 @@ public class BeehiveManager : MonoBehaviour
     {
         bm = this;
         gameState = GameState.HIVE_VIEW;
+        weekProgress = 0;
+        weekNumber = 1;
 
         //Construct new beehive.
         beehive = new Beehive(numberOfFrames, startingPopulation);
@@ -94,7 +122,20 @@ public class BeehiveManager : MonoBehaviour
 
         beehive.queenBeeHealth -= queenHealthRate * Time.deltaTime;
 
+        weekProgress += weekProgressRate * Time.deltaTime;
+        if(weekProgress >= 1)
+        {
+            NewWeek();
+        }
   
+    }
+
+    public void NewWeek()
+    {
+        weekProgress = 0;
+        weekNumber++;
+        GetComponent<MapGenerator>().GenerateFlowers();
+        uiManager.CloseFlowerMenu();
     }
 
 

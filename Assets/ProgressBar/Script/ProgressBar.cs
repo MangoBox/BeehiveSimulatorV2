@@ -80,7 +80,7 @@ public class ProgressBar : MonoBehaviour
 
         if (Alert >= val)
         {
-            bar.color = BarAlertColor;
+            //bar.color = BarAlertColor;
         }
         else
         {
