@@ -1610,7 +1610,6 @@ MonoBehaviour:
   startingHoney: 5000
   queenHealthRate: 0.01
   weekProgressRate: 0.016666668
-  breederCost: 0
   frameTilemap: {fileID: 1786612709}
   overlayTilemap: {fileID: 1558550454}
   emptyHoneycomb: {fileID: 11400000, guid: 750f57b0bd52b064b93b71c3471502e0, type: 2}
@@ -1656,7 +1655,7 @@ MonoBehaviour:
   queenBeeHealthMeter: {fileID: 1392380500}
   weekMeter: {fileID: 806823516}
   weekNumber: {fileID: 671076240}
-  pauseMenu: {fileID: 0}
+  pauseMenu: {fileID: 165880427}
   flowerMenu: {fileID: 642437305}
   rewardText: {fileID: 1044163781}
   riskText: {fileID: 1400812388}
