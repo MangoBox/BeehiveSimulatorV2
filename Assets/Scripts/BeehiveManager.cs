@@ -63,7 +63,6 @@ public class BeehiveManager : MonoBehaviour
     public int startingHoney;
     public float queenHealthRate;
     public float weekProgressRate;
-    public float breederCost;
 
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
@@ -195,13 +194,23 @@ public class BeehiveManager : MonoBehaviour
 
     public void ClickOnCell(Vector3Int pos)
     {
-        TileBase t = overlayTilemap.GetTile(pos);
         CellInfo ci = cellInfos[selectedCell];
 
-        if (beehive.currentHoney >= ci.buildCost && overlayTilemap.GetTile<Tile>(pos) == null)
+        if(ci.type != CellType.BLANK_CELL)
         {
-            beehive.addHoney(-ci.buildCost);
-            PlaceTile(ci.type, pos);
+            if (BeehiveManager.bm.frameTilemap.GetTile(pos) != null && beehive.currentHoney >= ci.buildCost && overlayTilemap.GetTile<Tile>(pos) == null)
+            { 
+                beehive.addHoney(-ci.buildCost);
+                PlaceTile(ci.type, pos);
+            }
+        } else
+        {
+            print("place new tile");
+            if (beehive.currentHoney >= ci.buildCost && frameTilemap.GetTile<Tile>(pos) == null)
+            {
+                beehive.addHoney(-ci.buildCost);
+                PlaceTile(ci.type, pos);
+            }
         }
     }
 
@@ -220,6 +229,10 @@ public class BeehiveManager : MonoBehaviour
 
             case CellType.ROYAL_JELLY_MAKER:
                 overlayTilemap.SetTile(pos, pollenTile);
+                return;
+
+            case CellType.BLANK_CELL:
+                frameTilemap.SetTile(pos, emptyHoneycomb);
                 return;
 
             default:

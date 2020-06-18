@@ -44,7 +44,6 @@ public class UIManager : MonoBehaviour
     public Text royalJellyCost;
     public Text royalJellyRate;
     public Text newCellCost;
-    public Text newCellRate;
 
     public GameObject[] hiveViewGameObjects;
     public GameObject[] mapViewGameObjects;
@@ -67,9 +66,13 @@ public class UIManager : MonoBehaviour
         BeehiveManager.bm.WeekNumberUpdateEvent += UpdateWeekNumber;
 
         //Update all initial values
-        honeyGeneratorCost.text = "Cost: " + BeehiveManager.bm.honeyGeneratorCost;
-        honeyGeneratorRate.text = "Rate: " + BeehiveManager.bm.baseHoneyPerSecond;
-        breederCost.text = "Cost: " + BeehiveManager.bm.breederCost;
+        honeyGeneratorCost.text = "Cost: " + BeehiveManager.bm.honeyGeneratorCost + "H";
+        honeyGeneratorRate.text = "Rate: " + BeehiveManager.bm.baseHoneyPerSecond + "H/s";
+        breederCost.text = "Cost: " + BeehiveManager.bm.cellInfos[1].buildCost + "H";
+        breederRate.text = "Rate: " + BeehiveManager.bm.basePopulationPerSecond + " Bees/s";
+        royalJellyCost.text = "Cost: " + BeehiveManager.bm.cellInfos[2].buildCost + "H";
+        royalJellyRate.text = (BeehiveManager.bm.baseJellyPerSecond * 60).ToString() + " Jelly/m";
+        newCellCost.text = "Cost: " + BeehiveManager.bm.cellInfos[3].buildCost + "H";
     }
 
     // Update is called once per frame
@@ -116,11 +119,13 @@ public class UIManager : MonoBehaviour
     public void OpenBuildMenu()
     {
         buildMenu.SetActive(true);
+        BeehiveManager.bm.gameState = GameState.CELL_BUILD;
     }
 
     public void CloseBuildMenu()
     {
         buildMenu.SetActive(false);
+        BeehiveManager.bm.gameState = GameState.HIVE_VIEW;
     }
 
     public void ClickHoneyGenerator()
@@ -138,6 +143,12 @@ public class UIManager : MonoBehaviour
     public void ClickRoyalJellyGenerator()
     {
         BeehiveManager.bm.selectedCell = (int)CellType.ROYAL_JELLY_MAKER;
+        UpdateBuildSprite();
+    }
+    
+    public void ClickBuildNewCell()
+    {
+        BeehiveManager.bm.selectedCell = (int)CellType.BLANK_CELL;
         UpdateBuildSprite();
     }
 
