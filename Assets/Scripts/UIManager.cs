@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public Image queenBeeHealthMeter;
     public Image weekMeter;
     public Text weekNumber;
+    public GameObject pauseMenu;
 
 
     [Header("Flower Menu")]
@@ -79,6 +80,20 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OpenPauseMenu()
+    {
+        pauseMenu.SetActive(true);
+    }
+
+    public void ClosePauseMenu() {
+        pauseMenu.SetActive(false);
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void UpdateHoneyCount(float honey)
