@@ -15,13 +15,14 @@ public class ControlManager : MonoBehaviour
     public MouseSettings mapSettings;
     private Vector3 lastMousePos;
 
+    public float hiveCameraSize;
+    public float mapCameraSize;
+
     private Vector3 originalCameraPos;
-    private float originalCameraSize;
 
     private void Start()
     {
         originalCameraPos = currentCamera.transform.position;
-        originalCameraSize = currentCamera.orthographicSize;
     }
 
     void Update()
@@ -64,7 +65,7 @@ public class ControlManager : MonoBehaviour
 
     public void ResetCamera()
     {
-        currentCamera.orthographicSize = originalCameraSize;
+        currentCamera.orthographicSize = BeehiveManager.bm.gameState == GameState.MAP_VIEW ? mapCameraSize : hiveCameraSize;
         currentCamera.transform.position = originalCameraPos;
 
     }

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
@@ -63,6 +62,7 @@ public class BeehiveManager : MonoBehaviour
     public int startingHoney;
     public float queenHealthRate;
     public float weekProgressRate;
+    public float queenBeeHealthRateIncrease;
 
     [Header("External GameObjects")]
     public Tilemap frameTilemap;
@@ -93,45 +93,59 @@ public class BeehiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float honeyGeneratingRate = calculateHoneyGrowthRate() * Time.deltaTime;
-
-        float jellyGeneratingRate = calculateJellyGrowthRate() * Time.deltaTime;
-
-        float populationGrowthRate = calculatePopulationGrowthRate() * Time.deltaTime;
-
-        //Net honey growth rate.
-        float netHoneyGrowth = honeyGeneratingRate - (populationGrowthRate + (jellyGeneratingRate * honeyToJellyFactor));
-        beehive.addHoney(netHoneyGrowth);
-        if (beehive.currentPollen > 0)
+        if(gameState != GameState.PAUSED)
         {
-            beehive.addPollen(-honeyGeneratingRate);
-        } else
-        {
-            beehive.setPollen(0);
+            float honeyGeneratingRate = calculateHoneyGrowthRate() * Time.deltaTime;
+
+            float jellyGeneratingRate = calculateJellyGrowthRate() * Time.deltaTime;
+
+            float populationGrowthRate = calculatePopulationGrowthRate() * Time.deltaTime;
+
+            //Net honey growth rate.
+            float netHoneyGrowth = honeyGeneratingRate - (populationGrowthRate + (jellyGeneratingRate * honeyToJellyFactor));
+            beehive.addHoney(netHoneyGrowth);
+            if (beehive.currentPollen > 0)
+            {
+                beehive.addPollen(-honeyGeneratingRate);
+            }
+            else
+            {
+                beehive.setPollen(0);
+            }
+
+            if (beehive.currentHoney <= 0)
+            {
+                beehive.setHoney(0);
+            }
+            else
+            {
+                beehive.addJelly(jellyGeneratingRate);
+                beehive.addPopulation(populationGrowthRate);
+            }
+
+            beehive.queenBeeHealth -= queenHealthRate * Time.deltaTime;
+            if (beehive.queenBeeHealth <= 0)
+            {
+                if (beehive.currentJelly >= 1)
+                {
+                    beehive.currentJelly -= 1f;
+                    beehive.queenBeeHealth = 1f;
+                    queenHealthRate *= queenBeeHealthRateIncrease;
+                }
+                else
+                {
+                    //GameOver
+                    uiManager.OpenGameOver((int)weekNumber);
+                    gameState = GameState.PAUSED;
+                }
+            }
+
+            weekProgress += weekProgressRate * Time.deltaTime;
+            if (weekProgress >= 1)
+            {
+                NewWeek();
+            }
         }
-
-        if(beehive.currentHoney <= 0)
-        {
-            beehive.setHoney(0);
-        } else
-        {
-            beehive.addJelly(jellyGeneratingRate);
-            beehive.addPopulation(populationGrowthRate);
-        }
-
-        beehive.queenBeeHealth -= queenHealthRate * Time.deltaTime;
-        if(beehive.queenBeeHealth <= 0)
-        {
-            //GameOver
-            uiManager.OpenGameOver((int)weekNumber);
-        }
-
-        weekProgress += weekProgressRate * Time.deltaTime;
-        if(weekProgress >= 1)
-        {
-            NewWeek();
-        }
-  
     }
 
     public void NewWeek()
@@ -296,5 +310,6 @@ public enum GameState
 {
     HIVE_VIEW,
     MAP_VIEW,
-    CELL_BUILD
+    CELL_BUILD,
+    PAUSED
 }

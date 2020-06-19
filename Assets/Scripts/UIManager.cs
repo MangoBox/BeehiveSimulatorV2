@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
     public Text weekNumber;
     public GameObject pauseMenu;
     public GameObject gameOverMenu;
+    public GameObject errorMenu;
 
 
     [Header("Flower Menu")]
@@ -85,10 +86,12 @@ public class UIManager : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        BeehiveManager.bm.gameState = GameState.PAUSED;
         pauseMenu.SetActive(true);
     }
 
     public void ClosePauseMenu() {
+        BeehiveManager.bm.gameState = hiveViewGameObjects[0].activeInHierarchy ? GameState.HIVE_VIEW : GameState.MAP_VIEW;
         pauseMenu.SetActive(false);
     }
 
@@ -124,7 +127,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateJellyCount(float jelly)
     {
-        royalJellyText.text = "Royal Jelly: " + ((int)jelly).ToString();
+        royalJellyText.text = "Royal Jelly: " + Math.Round(jelly,2).ToString();
     }
 
     public void UpdateQueenBeeHealth(float health)
@@ -214,8 +217,20 @@ public class UIManager : MonoBehaviour
     public void ConfirmFlowerCollect()
     {
         flowerMenu.SetActive(false);
-        BeehiveManager.bm.ConfirmFlowerMission(mostRecentFlower);
-        mostRecentFlower.gameObject.SetActive(false);
+        if(BeehiveManager.bm.beehive.population >= mostRecentFlower.beesRequired)
+        {
+            BeehiveManager.bm.ConfirmFlowerMission(mostRecentFlower);
+            mostRecentFlower.gameObject.SetActive(false);
+        } else
+        {
+            errorMenu.SetActive(true);
+        }
+        
+    }
+
+    public void CloseErrorMenu()
+    {
+        errorMenu.SetActive(false);
     }
 
     public void OpenMissionResultDialog(bool success, int pollen = 0)
