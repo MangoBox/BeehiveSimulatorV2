@@ -120,6 +120,11 @@ public class BeehiveManager : MonoBehaviour
         }
 
         beehive.queenBeeHealth -= queenHealthRate * Time.deltaTime;
+        if(beehive.queenBeeHealth <= 0)
+        {
+            //GameOver
+            uiManager.OpenGameOver((int)weekNumber);
+        }
 
         weekProgress += weekProgressRate * Time.deltaTime;
         if(weekProgress >= 1)

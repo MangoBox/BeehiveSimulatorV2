@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     public Image weekMeter;
     public Text weekNumber;
     public GameObject pauseMenu;
+    public GameObject gameOverMenu;
 
 
     [Header("Flower Menu")]
@@ -131,6 +132,11 @@ public class UIManager : MonoBehaviour
         queenBeeHealthMeter.fillAmount = health;
     }
 
+    public void OpenGameOver(int weekReached)
+    {
+        gameOverMenu.SetActive(true);
+    }
+
     public void OpenBuildMenu()
     {
         buildMenu.SetActive(true);
@@ -198,6 +204,11 @@ public class UIManager : MonoBehaviour
     public void CloseFlowerMenu()
     {
         flowerMenu.SetActive(false);
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
     public void ConfirmFlowerCollect()
