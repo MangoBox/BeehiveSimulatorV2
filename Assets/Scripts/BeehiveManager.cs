@@ -279,19 +279,23 @@ public class BeehiveManager : MonoBehaviour
                 return;
         }
     }
-
+    
+    //Gets the number of tiles given a parameter.
     public int GetTileAmount(Tile tile)
     {
+        //For each tile in the bounds of our tilemap.
         int amount = 0;
         BoundsInt tilemapBounds = overlayTilemap.cellBounds;
         foreach (Vector3Int pos in tilemapBounds.allPositionsWithin)
         {
+            //If the tile is valid AND is not null.
             Tile comparison_tile = overlayTilemap.GetTile<Tile>(pos);
             if(comparison_tile != null && comparison_tile == tile)
             {
                 amount++;
             }
         }
+        //Return the amount we found!
         return amount;
     }
 

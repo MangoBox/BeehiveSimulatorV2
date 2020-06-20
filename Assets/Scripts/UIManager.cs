@@ -60,6 +60,7 @@ public class UIManager : MonoBehaviour
     {
         print("Attaching");
 
+        //Attach callback events.
         BeehiveManager.bm.beehive.HoneyUpdateEvent += UpdateHoneyCount;
         BeehiveManager.bm.beehive.PopulationUpdateEvent += UpdatePopulationCount;
         BeehiveManager.bm.beehive.PollenUpdateEvent += UpdatePollenCount;
@@ -81,9 +82,10 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //STUB
     }
 
+    //ALL methods below are intrinsically named - their purpose is determined by their name.
     public void OpenPauseMenu()
     {
         BeehiveManager.bm.gameState = GameState.PAUSED;
@@ -214,15 +216,19 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
+    //When the confirm button is clicked on the flower mission menu. Determine if we can do the mission.
     public void ConfirmFlowerCollect()
     {
         flowerMenu.SetActive(false);
+        //Do we have enough bees?
         if(BeehiveManager.bm.beehive.population >= mostRecentFlower.beesRequired)
         {
+            //Confirm the mission.
             BeehiveManager.bm.ConfirmFlowerMission(mostRecentFlower);
             mostRecentFlower.gameObject.SetActive(false);
         } else
         {
+            //Quit out of the menu and display the error message.
             errorMenu.SetActive(true);
         }
         
@@ -246,6 +252,7 @@ public class UIManager : MonoBehaviour
         missionResultMenu.SetActive(false);
     }
 
+    //Open the flower mission menu. Assign menu variables as nessecary (from Flower class).
     public void OpenFlowerMenu(Flower flower)
     {
         flowerMenu.SetActive(true);
