@@ -78,6 +78,7 @@ public class BeehiveManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Initialise singleton patterns, game states and default variable values.
         bm = this;
         gameState = GameState.HIVE_VIEW;
         weekProgress = 0;
@@ -93,43 +94,56 @@ public class BeehiveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update per-frame information if game isn't paused.
         if(gameState != GameState.PAUSED)
         {
+            //Calculate the rates of the three resources.
             float honeyGeneratingRate = calculateHoneyGrowthRate() * Time.deltaTime;
 
             float jellyGeneratingRate = calculateJellyGrowthRate() * Time.deltaTime;
 
             float populationGrowthRate = calculatePopulationGrowthRate() * Time.deltaTime;
 
-            //Net honey growth rate.
+            //Net honey growth rate. Calculated from the growth rates of each.
             float netHoneyGrowth = honeyGeneratingRate - (populationGrowthRate + (jellyGeneratingRate * honeyToJellyFactor));
+
+            //Add or remove honey to the beehive appropriately.
             beehive.addHoney(netHoneyGrowth);
             if (beehive.currentPollen > 0)
             {
+                //Compensate for pollen usage.
                 beehive.addPollen(-honeyGeneratingRate);
             }
             else
             {
+                //Prevent pollen entering negatives.
                 beehive.setPollen(0);
             }
 
+            //If honey does not have any honey, reset the current honey amount to zero to avoid negatives.
             if (beehive.currentHoney <= 0)
             {
                 beehive.setHoney(0);
             }
             else
             {
+                //Add jelly and population if nessecary.
                 beehive.addJelly(jellyGeneratingRate);
                 beehive.addPopulation(populationGrowthRate);
             }
 
+            //Remove health from the Queen Bee.
             beehive.queenBeeHealth -= queenHealthRate * Time.deltaTime;
             if (beehive.queenBeeHealth <= 0)
             {
+                //If the queen bee no longer has health.
+                //Attempt to use royal jelly.
                 if (beehive.currentJelly >= 1)
                 {
+                    //Take away royal jelly and create a new queen bee.
                     beehive.currentJelly -= 1f;
                     beehive.queenBeeHealth = 1f;
+                    //Make the game harder by making the queen bee die faster.
                     queenHealthRate *= queenBeeHealthRateIncrease;
                 }
                 else
@@ -140,6 +154,7 @@ public class BeehiveManager : MonoBehaviour
                 }
             }
 
+            //Progress the week and start new week if nessecary.
             weekProgress += weekProgressRate * Time.deltaTime;
             if (weekProgress >= 1)
             {
@@ -150,6 +165,7 @@ public class BeehiveManager : MonoBehaviour
 
     public void NewWeek()
     {
+        //Start new week by refreshing week.
         weekProgress = 0;
         weekNumber++;
         GetComponent<MapGenerator>().GenerateFlowers();
@@ -178,13 +194,16 @@ public class BeehiveManager : MonoBehaviour
 
     public void ConfirmFlowerMission(Flower flower)
     {
+        //Confirm the current flower mission.
         bool success = Random.value <= flower.successChance;
         uiManager.OpenMissionResultDialog(success, (int)flower.reward);
         if(success)
         {
+            //If the mission is a success, the bees return with their pollen.
             beehive.addPollen(flower.reward);
         } else
         {
+            //If the mission is a failure, no bees return and thus they are lost.
             beehive.addPopulation(-flower.beesRequired);
         }
         
@@ -199,22 +218,23 @@ public class BeehiveManager : MonoBehaviour
 
     float calculateJellyGrowthRate()
     {
-        //Calculates honey growth rate per second. Should be as a
-        //function of bees pollen?
+        //Calculates jelly growth rate per second.
         return baseJellyPerSecond * (float)GetTileAmount(jelly);
     }
 
     float calculatePopulationGrowthRate()
     {
-        //Calculates honey growth rate per second. Should be as a
-        //function of bees pollen?
+        //Calculates population growth rate based off current breeder amount in hive.
         return basePopulationPerSecond * (float)GetTileAmount(breeder);
     }
 
+    //Click on cell
     public void ClickOnCell(Vector3Int pos)
     {
+        //Get the clicked on cell.
         CellInfo ci = cellInfos[selectedCell];
 
+        //If we are adding any cell on the overlay layer.
         if(ci.type != CellType.BLANK_CELL)
         {
             if (BeehiveManager.bm.frameTilemap.GetTile(pos) != null && beehive.currentHoney >= ci.buildCost && overlayTilemap.GetTile<Tile>(pos) == null)
@@ -224,7 +244,7 @@ public class BeehiveManager : MonoBehaviour
             }
         } else
         {
-            print("place new tile");
+            //If we are adding a new hive cell (a honeycomb hexagon), add to the frame layer.
             if (beehive.currentHoney >= ci.buildCost && frameTilemap.GetTile<Tile>(pos) == null)
             {
                 beehive.addHoney(-ci.buildCost);
@@ -233,6 +253,7 @@ public class BeehiveManager : MonoBehaviour
         }
     }
 
+    //Place a tile, respecting tile type given a parameter. Simple switching parameter.
     public void PlaceTile(CellType type, Vector3Int pos)
     {
         switch (type)
