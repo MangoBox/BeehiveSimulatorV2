@@ -209,20 +209,20 @@ public class BeehiveManager : MonoBehaviour
         
     }
 
-    float calculateHoneyGrowthRate()
+    public float calculateHoneyGrowthRate()
     {
         //Calculates honey growth rate per second. Should be as a
         //function of bees pollen?
         return beehive.currentPollen > 0 ? baseHoneyPerSecond * (float)GetTileAmount(honeydrop) : 0;
     }
 
-    float calculateJellyGrowthRate()
+    public float calculateJellyGrowthRate()
     {
         //Calculates jelly growth rate per second.
         return baseJellyPerSecond * (float)GetTileAmount(jelly);
     }
 
-    float calculatePopulationGrowthRate()
+    public float calculatePopulationGrowthRate()
     {
         //Calculates population growth rate based off current breeder amount in hive.
         return basePopulationPerSecond * (float)GetTileAmount(breeder);
