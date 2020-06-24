@@ -1,0 +1,27 @@
+BEGIN HandleControls
+	Let minSize = Minimum Camera Size
+	Let maxSize = Maximum Camera Size
+	Let scrollDist = Scroll Distance Multiplier
+	IF Left Click User Input THEN
+		Let mousePos = Get Mouse Position
+		Let ray = Convert Position into Ray (mousePos)
+		IF Game in Hive View THEN
+			Let tilePosition = Convert Ray into Tile Position (ray)
+			Click On Tile
+		ENDIF
+		IF User Is Scrolling THEN
+			Let scrollDelta = Scroll Distance
+			Set Camera Size to scrollDelta x scrollDist
+			Clamp Camera Size between 0 and 1
+		ENDIF
+		IF Right Click User Input THEN
+			IF Right Click User Input In Last Frame THEN
+				Let lastPos = Mouse Position
+				Set lastPos = Normalize (lastPos)
+			Let mouseDelta to Difference between lastPos and Get Mouse Position
+			Set mouseDelta to Normalize mouseDelta
+			Set Camera Position to mouseDelta
+			Set lastPos to Mouse Position
+		ENDIF
+	ENDIF
+END HandleControls

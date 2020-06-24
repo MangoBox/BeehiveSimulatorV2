@@ -1,0 +1,12 @@
+BEGIN DrawMap
+	Let width = Map Width
+	Let height = Map Height
+	Let scale = Map Scale
+	Let noiseMap = New Array [width, height]
+	FOR y = 0 to height
+		FOR x = 0 to width
+			noiseMap [ x, y ] = Retrieve Perlin Noise at (x,y)
+		NEXT x
+	NEXT y
+
+END DrawMap
