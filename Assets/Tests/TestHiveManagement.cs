@@ -35,12 +35,31 @@ namespace Tests
 
             bm.selectedCell = 0;
             bm.overlayTilemap.FloodFill(Vector3Int.zero, bm.jelly);
-            Debug.Log("Jelly Tiles" + bm.GetTileAmount(bm.jelly));
+            bm.ClickOnCell(Vector3Int.zero);
+            Debug.Log("Jelly Tiles" + bm.GetTileAmount(bm.honeydrop));
             bm.beehive.setHoney(100000);
             bm.beehive.setPollen(300000);
             yield return new WaitForSeconds(0.5f);
             Debug.Log("Current Jelly after 0.5 seconds: " + bm.beehive.currentJelly.ToString());
-            Assert.GreaterOrEqual(bm.beehive.currentJelly,0,"Not enough royal jelly.");
+            Assert.Greater(bm.beehive.currentJelly,0,"Not enough royal jelly.");
+        }
+
+        [UnityTest]
+        public IEnumerator TestRoyalJellyUsage()
+        {
+            SceneManager.LoadScene("MainScene");
+            yield return null;
+            BeehiveManager bm = MonoBehaviour.FindObjectOfType<BeehiveManager>();
+            Assert.IsNotNull(bm);
+
+            int originalJelly = 100;
+            Debug.Log("Current Jelly after 0 seconds: " + originalJelly.ToString());
+            bm.selectedCell = 0;
+            bm.beehive.setJelly(originalJelly);
+            bm.queenHealthRate = 100f;
+            yield return new WaitForSeconds(0.5f);
+            Debug.Log("Current Jelly after 0.5 seconds: " + bm.beehive.currentJelly.ToString());
+            Assert.AreNotEqual(bm.beehive.currentJelly, originalJelly, "Jelly has not been used here.");
         }
     }
 }

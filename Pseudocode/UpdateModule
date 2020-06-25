@@ -1,0 +1,42 @@
+BEGIN UpdateFrame
+	GameState = GetGameState()
+	Get Honey To To Jelly Factor
+	IF GameState is not PAUSED THEN
+		HoneyGenerationRate = CalculateHoneyGrowthRate() x GetDeltaTime()
+		JellyGenerationRate = CalculateJellyGrowthRate() x GetDeltaTime()
+		PopulationGenerationRate = CalculatePopulationGrowthRate() x GetDeltaTime()
+
+		NetHoneyGrowth = HoneyGenerationRate - (PopulationGenerationRate + (JellyGenerationRate x HoneyToJellyFactor))
+		AddHoney(NetHoneyGrowth)
+		IF Beehive's current pollen > 0 THEN
+			AddPollen(-HoneyGenerationRate)
+		ELSE
+			SetPollen(0)
+		ENDIF
+
+		IF Beehive's current honey <= 0 THEN
+			SetHoney(0)
+		ELSE
+			AddJelly(JellyGenerationRate)
+			AddPopulation(PopulationGrowthRate)
+		ENDIF
+
+		Get Queen Bee Health Rate
+		Remove Queen Bee Health = Get Queen Bee Health Rate x GetDeltaTime()
+		IF Queen Bee Health <= 0 THEN
+			IF Beehive's Current Jelly >= 1 THEN
+				Current Jelly = Current Jelly - 1
+				Queen Bee Health = 1
+			ELSE
+				OpenGameOverMenu()
+				GameState = PAUSED
+			ENDIF
+		ENDIF 
+
+		Get Week Progress Rate
+		WeekProgress = WeekProgress + Get Week Progress Rate x GetDeltaTime()
+		IF WeekProgress >= 1 THEN
+			NewWeek()
+		ENDIF
+	ENDIF
+END UpdateFrame

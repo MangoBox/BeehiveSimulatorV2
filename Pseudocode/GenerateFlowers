@@ -1,0 +1,15 @@
+BEGIN GenerateFlowers
+	ClearCurrentFlowers()
+	MaxFlowers = Get maxFlowers
+	FOR i = 0 to MaxFlowers STEP 1
+		FlowerSprite = ChooseRandomFlowerSprite()
+		EmptyGameObject = New Game Object ()
+		Add new SpriteRenderer to FlowerSprite
+		Add Collider to Flower Sprite
+		SetFlowerTransform()
+		Add Flower Class to Flower
+		ApplyMissionSettings()
+		Add Rendering Layer to Flower
+		Append Flower to Instantiated List
+	NEXT i
+END GenerateFlowers

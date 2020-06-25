@@ -1,0 +1,18 @@
+BEGIN CalculateRiskLevel
+	Get Success Rate
+	CASEWHERE Success Rate is
+		< 0.3: Return "EXTREME"
+			   SetSuccessColor("EXTREME")
+		< 0.5: Return "VERY HIGH"
+			   SetSuccessColor("VERY HIGH")
+		< 0.7: Return "HIGH"
+			   SetSuccessColor("HIGH")
+		< 1.0: Return "MEDIUM"
+			   SetSuccessColor("MEDIUM")
+		= 1.0: Return "NONE"
+			   SetSuccessColor("NONE")
+		OTHERWISE:
+			   Return "UNKNOWN RISK"
+			   SetSuccessColor("UNKNOWN RISK")
+	ENDCASE
+END CalculateRiskLevel

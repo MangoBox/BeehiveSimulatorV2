@@ -141,7 +141,7 @@ public class BeehiveManager : MonoBehaviour
                 if (beehive.currentJelly >= 1)
                 {
                     //Take away royal jelly and create a new queen bee.
-                    beehive.currentJelly -= 1f;
+                    beehive.addJelly(-1f);
                     beehive.queenBeeHealth = 1f;
                     //Make the game harder by making the queen bee die faster.
                     queenHealthRate *= queenBeeHealthRateIncrease;
